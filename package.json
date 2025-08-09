@@ -62,6 +62,7 @@
     "better-sqlite3": "^12.2.0",
     "edge.js": "^6.2.1",
     "luxon": "^3.7.1",
+    "openai": "^5.12.2",
     "reflect-metadata": "^0.2.2"
   },
   "hotHook": {
