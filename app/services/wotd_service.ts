@@ -1,3 +1,5 @@
+import WotdEntries from '#models/wotd_entries'
+import { DateTime } from 'luxon'
 import OpenAI from 'openai'
 
 export type Wotd = {
@@ -15,6 +17,28 @@ export class WotdService {
   constructor() {
     this.client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
     this.model = 'gpt-5-nano'
+  }
+
+  /** Get YYYY-MM-DD in Europe/London */
+  private todayISO(): string {
+    return DateTime.now().setZone('Europe/London').toISODate()!
+  }
+
+  async find(date: string) {
+    return await WotdEntries.findByOrFail('date', date)
+  }
+
+  async getToday() {
+    return await this.find(this.todayISO())
+  }
+
+  async store(date: string, wotd: Wotd) {
+    return await WotdEntries.create({ date, ...wotd })
+  }
+
+  async storeToday() {
+    const wotd = await this.generate()
+    return await this.store(this.todayISO(), wotd)
   }
 
   async generate(): Promise<Wotd> {
