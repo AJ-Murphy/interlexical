@@ -51,43 +51,50 @@ export class WotdService {
             {
               type: 'input_text',
               text: `# Role and Objective
-Generate an engaging and educational "Word of the Day" entry that includes the word, its part of speech, a clear and concise definition, an original example sentence, and a brief etymology. The entry should be suitable for a general audience and output as structured JSON.
+Create an engaging "Word of the Day" feature that educates a broad audience, presenting all elements in a structured JSON format.
 
 # Instructions
-- Select an interesting, moderately uncommon English word that would appeal to and educate a broad audience.
-- Identify the word's part of speech (such as noun, verb, adjective).
-- Write a clear, concise, and accurate definition.
-- Create an original example sentence that uses the word naturally and contextually.
-- Write a brief etymology or origin of the word, informed by credible sources.
-
-## Constraints
-- Use standard UK-neutral spelling.
-- Avoid neologisms unless they are historically attested.
+- Select a moderately uncommon English word with educational appeal.
+- Identify its part of speech (e.g., noun, verb, adjective).
+- Write a clear definition (15-120 characters).
+- Provide an original, contextual example sentence (20-200 characters).
+- Add a succinct etymology (one sentence, under 150 characters, ending with a period).
+- Use standard UK-neutral spelling conventions.
+- Avoid neologisms unless historically established.
 - Do not include profanity or slurs.
-- Ensure the output strictly adheres to the specified JSON schema.
+- Strictly follow the provided JSON schema for output.
 
-# Procedure
-Begin with a concise checklist (3-7 bullets) outlining your approach before generating the entry; keep items conceptual, not implementation-level.
+# Approach Checklist
+Begin with a concise checklist (3-7 bullets) of what you will do; keep items conceptual, not implementation-level.
+- Choose a word that is moderately uncommon and interesting.
+- Verify part of speech and ensure accuracy.
+- Write a concise definition within specified length constraints.
+- Draft an original, contextually appropriate example sentence.
+- Summarise etymology succinctly in a single sentence.
+- Format output precisely as defined in the JSON schema.
 
 # Output Format
-Return the result as JSON using these keys:
-{
-  "word": [string],
-  "part_of_speech": [string],
-  "definition": [string],
-  "example_sentence": [string],
-  "etymology": [string]
+Produce a single JSON object with the following fields, in order:
+- "word"
+- "part_of_speech"
+- "definition"
+- "example_sentence"
+- "etymology"
+
+Ensure all string values comply with specified length and content constraints.
+Include an # Output Format section specifying exact fields and types:
+# Output Format {
+  "word": string,
+  "part_of_speech": string,
+  "definition": string,
+  "example_sentence": string,
+  "etymology": string
 }
 
-After generating the entry, validate in 1-2 lines that all JSON fields are present and conform to the requested output format; do not produce any output except the final JSON object.
-
-# Additional Details
-- No user input is required; simply generate the word of the day.
-
 # Stop Conditions
-- End output after producing a single, fully-formed JSON object as described in the schema.
+- Generation is complete when a valid JSON object matching the schema and all content guidelines is produced.
 
-(Mandate: Generate an appealing and educational "Word of the Day" entry, comprising the word, part of speech, definition, example sentence, and etymology in the specified JSON format only.)`,
+(Mandate: Output only the "Word of the Day" entry in the required JSON format.)`,
             },
           ],
         },
@@ -102,13 +109,13 @@ After generating the entry, validate in 1-2 lines that all JSON fields are prese
             properties: {
               word: {
                 type: 'string',
-                description: 'A single vocabulary word. Recommended length: 3-15 characters.',
+                description: 'A single vocabulary word.',
                 minLength: 3,
                 maxLength: 15,
               },
               part_of_speech: {
                 type: 'string',
-                description: "The word's grammatical role (e.g., noun, verb, adjective).",
+                description: "The word's grammatical role.",
                 minLength: 3,
                 maxLength: 12,
               },
@@ -128,7 +135,7 @@ After generating the entry, validate in 1-2 lines that all JSON fields are prese
                 type: 'string',
                 description: 'Short origin/history of the word.',
                 minLength: 15,
-                maxLength: 180,
+                maxLength: 150,
               },
             },
             required: ['word', 'part_of_speech', 'definition', 'example_sentence', 'etymology'],
