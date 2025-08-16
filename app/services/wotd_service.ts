@@ -1,6 +1,7 @@
 import WotdEntries from '#models/wotd_entries'
 import { DateTime } from 'luxon'
 import OpenAI from 'openai'
+import env from '#start/env'
 
 export type Wotd = {
   word: string
@@ -15,7 +16,7 @@ export class WotdService {
   private model: string
 
   constructor() {
-    this.client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+    this.client = new OpenAI({ apiKey: env.get('OPENAI_API_KEY') })
     this.model = 'gpt-5-nano'
   }
 
