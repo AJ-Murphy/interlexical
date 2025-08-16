@@ -8,7 +8,6 @@
 */
 
 const TodaysController = () => import('#controllers/todays_controller')
-const GenerateController = () => import('#controllers/generate_controller')
 import router from '@adonisjs/core/services/router'
 
 router
