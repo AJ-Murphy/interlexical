@@ -14,7 +14,6 @@ import router from '@adonisjs/core/services/router'
 router
   .group(() => {
     router.get('/word', [TodaysController])
-    router.post('/generate', [GenerateController])
   })
   .prefix('/api')
 
