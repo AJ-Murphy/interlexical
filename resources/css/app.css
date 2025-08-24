@@ -1,10 +1,47 @@
-* {
-  margin: 0;
-  padding: 0;
+/* the props */
+@import "https://unpkg.com/open-props";
+
+/* optional imports that use the props */
+@import "https://unpkg.com/open-props/normalize.min.css";
+
+@import "https://unpkg.com/open-props/easings.min.css";
+@import "https://unpkg.com/open-props/animations.min.css";
+@import "https://unpkg.com/open-props/sizes.min.css";
+@import "https://unpkg.com/open-props/gradients.min.css";
+
+html {
+  block-size: 100%;
+  inline-size: 100%;
 }
 
-html,
 body {
-  height: 100%;
-  width: 100%;
+  min-block-size: 100%;
+  min-inline-size: 100%;
+  font-family: var(--font-neo-grotesque);
+  font-size: var(--size-3);
+  display: grid;
+  gap: var(--size-3);
+  justify-content: center;
+  background-image: var(--gradient-8);
+}
+
+.heading {
+  text-align: center;
+  max-width: var(--size-content-3);
+  margin-inline: var(--size-3);
+}
+
+.heading__title {
+  font-weight: var(--font-weight-2);
+}
+
+.heading__subtitle {
+  text-transform: uppercase;
+}
+
+.container {
+  display: grid;
+  gap: var(--size-3);
+  max-width: var(--size-content-3);
+  margin-inline: var(--size-3);
 }

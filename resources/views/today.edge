@@ -4,14 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Interlexical</title>
+  <title>Interlexical - Word of the Day</title>
   @vite(['resources/css/app.css'])
 </head>
 <body>
-  <h1>{{ wotd.word }}</h1>
-  <p>{{ wotd.part_of_speech }}</p>
-  <p>{{ wotd.definition }}</p>
-  <p>{{ wotd.example_sentence }}</p>
-  <p>{{ wotd.etymology }}</p>
+  <header class="heading">
+    <h1 class="heading__title">Interlexical</h1>
+    <p class="heading__subtitle">Word of the Day</p>
+  </header>
+
+  <main>
+    <article class="container">
+      <h2 class="container__title">{{ wotd.word }}</h1>
+      <i class="container__text">{{ wotd.part_of_speech }}</i>
+      <p class="container__text">{{ wotd.definition }}</p>
+      <blockquote class="container__text">{{ wotd.example_sentence }}</blockquote>
+      <p class="container__text">{{ wotd.etymology }}</p>
+    </article>
+  </main>
 </body>
 </html>
