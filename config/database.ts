@@ -14,7 +14,7 @@ const dbConfig = defineConfig({
         port: env.get('PG_PORT'),
         password: env.get('PG_PASSWORD'),
         database: env.get('PG_NAME'),
-        ssl: true,
+        // ssl: true,
       },
       migrations: {
         naturalSort: true,
