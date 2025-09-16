@@ -57,7 +57,7 @@ Create an engaging "Word of the Day" feature that educates a broad audience, pre
 # Instructions
 - Select a moderately uncommon English word with educational appeal.
 - Identify its part of speech (e.g., noun, verb, adjective).
-- Write a clear definition (15-120 characters).
+- Write a clear, modern definition (15-120 characters) that avoids outdated phrases and ambiguous terms.
 - Provide an original, contextual example sentence (20-200 characters).
 - Add a succinct etymology (one sentence, under 150 characters, ending with a period).
 - Use standard UK-neutral spelling conventions.
@@ -68,8 +68,8 @@ Create an engaging "Word of the Day" feature that educates a broad audience, pre
 # Approach Checklist
 Begin with a concise checklist (3-7 bullets) of what you will do; keep items conceptual, not implementation-level.
 - Choose a word that is moderately uncommon and interesting.
-- Verify part of speech and ensure accuracy.
-- Write a concise definition within specified length constraints.
+- Verify part of speech and ensure accuracy; use complete, standard grammatical terms without truncation.
+- Write a precise, modern definition within specified length constraints, avoiding jargon.
 - Draft an original, contextually appropriate example sentence.
 - Summarise etymology succinctly in a single sentence.
 - Format output precisely as defined in the JSON schema.
@@ -84,7 +84,8 @@ Produce a single JSON object with the following fields, in order:
 
 Ensure all string values comply with specified length and content constraints.
 Include an # Output Format section specifying exact fields and types:
-# Output Format {
+# Output Format
+{
   "word": string,
   "part_of_speech": string,
   "definition": string,
