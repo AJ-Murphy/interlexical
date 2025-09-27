@@ -33,6 +33,17 @@ export class WotdService {
     return await this.find(this.todayISO())
   }
 
+  async entriesInDateRange(start: DateTime, end: DateTime) {
+    return await WotdEntries.query().whereBetween('date', [start.toISODate()!, end.toISODate()!])
+  }
+
+  async recentWordsToAvoid(days = 60) {
+    const end = DateTime.now()
+    const start = end.minus({ days })
+    const entries = await this.entriesInDateRange(start, end)
+    return entries.map(({ word }) => word)
+  }
+
   async store(date: string, wotd: Wotd) {
     return await WotdEntries.create({ date, ...wotd })
   }
@@ -43,6 +54,13 @@ export class WotdService {
   }
 
   async generate(): Promise<Wotd> {
+    const avoidList = await this.recentWordsToAvoid()
+
+    const avoidancePrompt = `## Avoidance List
+Do not use any of the following words.
+${avoidList.join(', ')}
+`
+
     const resp = await this.client.responses.parse({
       model: this.model,
       input: [
@@ -55,7 +73,8 @@ export class WotdService {
 Create an engaging "Word of the Day" feature that educates a broad audience, presenting all elements in a structured JSON format.
 
 # Instructions
-- Select a moderately uncommon English word with educational appeal.
+- Select an interesting, moderately uncommon English word that would appeal to and educate a broad audience.
+- Avoid using any words included in the provided avoidance list to prevent duplicates (if such a list is supplied).
 - Identify its part of speech (e.g., noun, verb, adjective).
 - Write a clear, modern definition (15-120 characters) that avoids outdated phrases and ambiguous terms.
 - Provide an original, contextual example sentence (20-200 characters).
@@ -73,6 +92,8 @@ Begin with a concise checklist (3-7 bullets) of what you will do; keep items con
 - Draft an original, contextually appropriate example sentence.
 - Summarise etymology succinctly in a single sentence.
 - Format output precisely as defined in the JSON schema.
+
+${avoidancePrompt}
 
 # Output Format
 Produce a single JSON object with the following fields, in order:
