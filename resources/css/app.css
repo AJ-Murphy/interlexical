@@ -9,6 +9,13 @@
 @import "https://unpkg.com/open-props/sizes.min.css";
 @import "https://unpkg.com/open-props/gradients.min.css";
 
+:root {
+  --background-gradient: var(--gradient-9);
+  @media (prefers-color-scheme: dark) {
+    --background-gradient: var(--gradient-8);
+  }
+}
+
 html {
   block-size: 100%;
   inline-size: 100%;
@@ -22,7 +29,8 @@ body {
   display: grid;
   gap: var(--size-3);
   justify-content: center;
-  background-image: var(--gradient-8);
+  background-image: var(--background-gradient);
+
 }
 
 .heading {
