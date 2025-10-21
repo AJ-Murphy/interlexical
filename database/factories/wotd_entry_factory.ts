@@ -1,16 +1,13 @@
 import factory from '@adonisjs/lucid/factories'
-import Wotd from '#models/wotd'
+import Wotd from '#models/wotd_entries'
 import { DateTime } from 'luxon'
 
-let dt = DateTime.now().minus({ days: 7 })
 const PARTS_OF_SPEECH = ['verb', 'adverb', 'noun', 'adjective'] as const
 type PartOfSpeech = (typeof PARTS_OF_SPEECH)[number]
 
 export const WotdFactory = factory
   .define(Wotd, async ({ faker }) => {
-    const date = dt.toISODate()
-    dt = dt.plus({ days: 1 })
-
+    const date = DateTime.now().startOf('day').toISODate()
     const partOfSpeech = faker.helpers.arrayElement<PartOfSpeech>(PARTS_OF_SPEECH)
 
     return {
