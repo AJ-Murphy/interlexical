@@ -1,4 +1,4 @@
-import WotdEntries from '#models/wotd'
+import WotdEntries from '#models/wotd_entries'
 import { DateTime } from 'luxon'
 import OpenAI from 'openai'
 import env from '#start/env'
