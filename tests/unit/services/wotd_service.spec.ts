@@ -4,7 +4,8 @@ import { DateTime } from 'luxon'
 import testUtils from '@adonisjs/core/services/test_utils'
 
 test.group('Services wotd service', (group) => {
-  group.each.setup(() => testUtils.db().truncate())
+  group.each.setup(() => testUtils.db().withGlobalTransaction())
+
   test('todayISO returns correct date format in London timezone', async ({ assert }) => {
     const service = new WotdService()
 
