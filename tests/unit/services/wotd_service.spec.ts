@@ -25,4 +25,20 @@ test.group('Services wotd service', (group) => {
 
     assert.equal(result, expectedLondonDate)
   })
+
+  test('returns entry when date exists', async ({ assert }) => {
+    const service = new WotdService()
+    const dateToday = DateTime.now().startOf('day')
+
+    const result = await service.find(dateToday.toISODate())
+
+    assert.isNotNull(result.date)
+  })
+
+  test('throws error when date does not exist', async ({ assert }) => {
+    const service = new WotdService()
+    const nonExistentDate = '3000-01-01'
+
+    await assert.rejects(async () => await service.find(nonExistentDate), 'Row not found')
+  })
 })
