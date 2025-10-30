@@ -42,3 +42,17 @@ test.group('find', (group) => {
     await assert.rejects(async () => await service.find(nonExistentDate), 'Row not found')
   })
 })
+
+test.group('getToday', (group) => {
+  group.each.setup(() => testUtils.db().withGlobalTransaction())
+
+  test("returns today's wotd", async ({ assert }) => {
+    const service = new WotdService()
+    const today = DateTime.now().setZone('Europe/London').startOf('day')
+
+    const result = await service.getToday()
+    const resultDate = DateTime.fromJSDate(new Date(result.date)).setZone('Europe/London')
+
+    assert.isTrue(resultDate.hasSame(today, 'day'))
+  })
+})
