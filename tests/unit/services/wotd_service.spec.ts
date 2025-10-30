@@ -28,11 +28,12 @@ test.group('find', (group) => {
 
   test('returns entry when date exists', async ({ assert }) => {
     const service = new WotdService()
-    const dateToday = DateTime.now().startOf('day')
+    const today = DateTime.now().setZone('Europe/London').startOf('day')
 
-    const result = await service.find(dateToday.toISODate())
+    const result = await service.find(today.toISODate()!)
+    const resultDate = DateTime.fromJSDate(new Date(result.date)).setZone('Europe/London')
 
-    assert.isNotNull(result.date)
+    assert.isTrue(resultDate.hasSame(today, 'day'))
   })
 
   test('throws error when date does not exist', async ({ assert }) => {
