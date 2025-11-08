@@ -57,3 +57,56 @@ test.group('getToday', (group) => {
     assert.isTrue(resultDate.hasSame(today, 'day'))
   })
 })
+
+test.group('entriesInDateRange', (group) => {
+  group.each.setup(() => testUtils.db().withGlobalTransaction())
+
+  test('returns entries within date range', async ({ assert }) => {
+    const service = new WotdService()
+    const today = DateTime.now().setZone('Europe/London').startOf('day')
+    const start = today.minus({ days: 7 })
+    const end = today
+
+    const results = await service.entriesInDateRange(start, end)
+
+    assert.isArray(results)
+    assert.isAtLeast(results.length, 1)
+
+    // Verify all returned entries are within the range
+    for (const entry of results) {
+      const entryDate = DateTime.fromJSDate(new Date(entry.date))
+      assert.isTrue(
+        entryDate >= start && entryDate <= end,
+        `Entry date ${entryDate.toISODate()} should be between ${start.toISODate()} and ${end.toISODate()}`
+      )
+    }
+  })
+
+  test('returns empty array when no entries exist in range', async ({ assert }) => {
+    const service = new WotdService()
+    const start = DateTime.fromISO('3000-01-01')
+    const end = DateTime.fromISO('3000-01-31')
+
+    const results = await service.entriesInDateRange(start, end)
+
+    assert.isArray(results)
+    assert.lengthOf(results, 0)
+  })
+
+  test('correctly excludes entries outside the range', async ({ assert }) => {
+    const service = new WotdService()
+    const today = DateTime.now().setZone('Europe/London').startOf('day')
+    const start = today.minus({ days: 2 })
+    const end = today.minus({ days: 1 })
+
+    const results = await service.entriesInDateRange(start, end)
+
+    // Verify that today's entry is not included
+    const todayIncluded = results.some((entry) => {
+      const entryDate = DateTime.fromJSDate(new Date(entry.date))
+      return entryDate.hasSame(today, 'day')
+    })
+
+    assert.isFalse(todayIncluded, "Today's entry should not be included in past date range")
+  })
+})
