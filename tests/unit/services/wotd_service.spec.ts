@@ -154,3 +154,50 @@ test.group('recentWordsToAvoid', (group) => {
     assert.isArray(words)
   })
 })
+
+test.group('store', (group) => {
+  group.each.setup(() => testUtils.db().withGlobalTransaction())
+
+  test('persists entry to database', async ({ assert }) => {
+    const service = new WotdService()
+    const testDate = '2025-12-26'
+    const testWotd = {
+      word: 'ephemeral',
+      part_of_speech: 'adjective',
+      definition: 'Lasting for a very short time.',
+      example_sentence: 'The beauty of cherry blossoms is ephemeral.',
+      etymology: 'From Greek ephemeros, meaning lasting only a day.',
+    }
+
+    await service.store(testDate, testWotd)
+
+    // Verify it can be retrieved
+    const retrieved = await service.find(testDate)
+    assert.equal(retrieved.word, testWotd.word)
+    assert.equal(retrieved.definition, testWotd.definition)
+  })
+
+  test('stores all wotd properties correctly', async ({ assert }) => {
+    const service = new WotdService()
+    const testDate = '2025-12-27'
+    const testWotd = {
+      word: 'ubiquitous',
+      part_of_speech: 'adjective',
+      definition: 'Present, appearing, or found everywhere.',
+      example_sentence: 'Smartphones have become ubiquitous in modern society.',
+      etymology: 'From Latin ubique, meaning everywhere.',
+    }
+
+    const result = await service.store(testDate, testWotd)
+
+    // Verify all properties are stored
+    assert.properties(result, [
+      'date',
+      'word',
+      'part_of_speech',
+      'definition',
+      'example_sentence',
+      'etymology',
+    ])
+  })
+})
