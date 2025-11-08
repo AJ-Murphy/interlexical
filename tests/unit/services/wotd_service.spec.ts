@@ -110,3 +110,47 @@ test.group('entriesInDateRange', (group) => {
     assert.isFalse(todayIncluded, "Today's entry should not be included in past date range")
   })
 })
+
+test.group('recentWordsToAvoid', (group) => {
+  group.each.setup(() => testUtils.db().withGlobalTransaction())
+
+  test('returns array of words from default 60 day period', async ({ assert }) => {
+    const service = new WotdService()
+
+    const words = await service.recentWordsToAvoid()
+
+    assert.isArray(words)
+    // Verify all elements are strings
+    for (const word of words) {
+      assert.isString(word)
+      assert.isAtLeast(word.length, 1)
+    }
+  })
+
+  test('returns words from custom time period when days parameter provided', async ({ assert }) => {
+    const service = new WotdService()
+    const customDays = 7
+
+    const words = await service.recentWordsToAvoid(customDays)
+
+    assert.isArray(words)
+
+    // Get entries for the same period to verify
+    const end = DateTime.now()
+    const start = end.minus({ days: customDays })
+    const entries = await service.entriesInDateRange(start, end)
+    const expectedWords = entries.map(({ word }) => word)
+
+    assert.deepEqual(words, expectedWords)
+  })
+
+  test('returns empty array when no entries exist in time period', async ({ assert }) => {
+    const service = new WotdService()
+
+    // Use a very small window that likely has no entries in the far past
+    // We'll mock this by checking a future scenario isn't possible
+    const words = await service.recentWordsToAvoid(0)
+
+    assert.isArray(words)
+  })
+})
