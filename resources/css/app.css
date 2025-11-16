@@ -1,19 +1,94 @@
-/* the props */
-@import "https://unpkg.com/open-props";
-
-/* optional imports that use the props */
-@import "https://unpkg.com/open-props/normalize.min.css";
-
-@import "https://unpkg.com/open-props/easings.min.css";
-@import "https://unpkg.com/open-props/animations.min.css";
-@import "https://unpkg.com/open-props/sizes.min.css";
-@import "https://unpkg.com/open-props/gradients.min.css";
+@import "open-props/style";
 
 :root {
-  --background-gradient: var(--gradient-9);
-  @media (prefers-color-scheme: dark) {
-    --background-gradient: var(--gradient-8);
-  }
+  --light: #f5e8d1;
+  --dark: #0f1b26;
+  --accent-1: #dd5639;
+  --accent-2: #20a5a6;
+
+  --surface-light: var(--light);
+  --surface-dark: var(--dark);
+
+  --text-light: var(--light);
+  --text-dark: var(--dark);
+  --text-outline-dark:
+    1px 0 var(--dark),
+    -1px 0 var(--dark),
+    0 1px var(--dark),
+    0 -1px var(--dark),
+    1px 1px var(--dark),
+    -1px 1px var(--dark),
+    1px -1px var(--dark),
+    -1px -1px var(--dark);
+
+  /* Paper texture overlay (dark variant for light backgrounds) */
+  --paper-texture-dark:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      color-mix(in srgb, var(--dark) 0.8%, transparent) 2px,
+      color-mix(in srgb, var(--dark) 0.8%, transparent) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      color-mix(in srgb, var(--dark) 0.8%, transparent) 2px,
+      color-mix(in srgb, var(--dark) 0.8%, transparent) 4px
+    ),
+    radial-gradient(
+      circle at 20% 30%, 
+      color-mix(in srgb, var(--dark) 0.4%, transparent) 0%, 
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 70% 60%, 
+      color-mix(in srgb, var(--dark) 0.6%, transparent) 0%, 
+      transparent 50%
+    );
+
+  /* Paper texture overlay (light variant for dark backgrounds) */
+  --paper-texture-light:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      color-mix(in srgb, var(--light) 0.8%, transparent) 2px,
+      color-mix(in srgb, var(--light) 0.8%, transparent) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      color-mix(in srgb, var(--light) 0.8%, transparent) 2px,
+      color-mix(in srgb, var(--light) 0.8%, transparent) 4px
+    ),
+    radial-gradient(
+      circle at 30% 40%, 
+      color-mix(in srgb, var(--light) 0.4%, transparent) 0%, 
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 65% 70%, 
+      color-mix(in srgb, var(--light) 0.6%, transparent) 0%, 
+      transparent 50%
+    );
+
+  /* Starry background pattern */
+  --star-background:
+    radial-gradient( 1px 1px at 20px 30px, var(--light), transparent ), 
+    radial-gradient( 1px 1px at 40px 70px, var(--light), transparent ), 
+    radial-gradient( 1px 1px at 90px 40px, var(--light), transparent ), 
+    radial-gradient( 1px 1px at 130px 80px, var(--light), transparent ), 
+    radial-gradient( 2px 2px at 160px 30px, var(--light), transparent ), 
+    var(--surface-dark);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html {
@@ -24,27 +99,55 @@ html {
 body {
   min-block-size: 100%;
   min-inline-size: 100%;
-  font-family: var(--font-neo-grotesque);
-  font-size: var(--size-3);
+  font-family: var(--font-transitional);
+  font-size: var(--size-4);
+  background-color: var(--surface-light);
+  background-image: var(--paper-texture-dark);
+  color: var(--text);
   display: grid;
-  gap: var(--size-3);
+  gap: var(--size-10);
   justify-content: center;
-  background-image: var(--background-gradient);
-
+  grid-template-rows: 3fr 5fr;
 }
 
 .heading {
   text-align: center;
-  max-width: var(--size-content-3);
-  margin-inline: var(--size-3);
+  color: var(--text-light);
+  display: grid;
+  place-content: center;
+  border-radius: var(--radius-1) var(--radius-1) var(--radius-conditional-3) var(--radius-conditional-3);
+  position: relative;
+  background: var(--star-background);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+}
+
+/* Subtle paper texture overlay */
+.heading::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: var(--paper-texture-light);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .heading__title {
-  font-weight: var(--font-weight-2);
+  font-size: var(--size-10);
+  text-shadow: var(--text-outline-dark);
+  -webkit-text-stroke: 0.5px var(--dark);
+  position: relative;
+  z-index: 1;
 }
 
 .heading__subtitle {
   text-transform: uppercase;
+  font-size: var(--size-5);
+  text-shadow: var(--text-outline-dark);
+  -webkit-text-stroke: 0.5px var(--dark);
+  position: relative;
+  z-index: 1;
 }
 
 .container {
@@ -52,4 +155,12 @@ body {
   gap: var(--size-3);
   max-width: var(--size-content-3);
   margin-inline: var(--size-3);
+}
+
+blockquote {
+  margin-block: var(--size-5);
+  margin-inline: 0;
+  padding-inline-start: var(--size-5);
+  border-left: var(--border-size-2) solid var(--accent-1);
+  color: var(--text-dark);
 }
