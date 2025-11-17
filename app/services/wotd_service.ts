@@ -14,6 +14,8 @@ export type Wotd = {
 export class WotdService {
   private client: OpenAI
   private model: string
+  private static readonly DEFAULT_AVOIDANCE_DAYS = 60
+  private static readonly TIMEZONE = 'Europe/London'
 
   constructor() {
     this.client = new OpenAI({ apiKey: env.get('OPENAI_API_KEY') })
@@ -22,7 +24,64 @@ export class WotdService {
 
   /** Get YYYY-MM-DD in Europe/London */
   private todayISO(): string {
-    return DateTime.now().setZone('Europe/London').toISODate()!
+    return DateTime.now().setZone(WotdService.TIMEZONE).toISODate()!
+  }
+
+  private getWotdSchema() {
+    return {
+      type: 'object',
+      properties: {
+        word: {
+          type: 'string',
+          description: 'A single English vocabulary word, 3-15 characters.',
+        },
+        part_of_speech: {
+          type: 'string',
+          description: "The word's grammatical role (e.g. noun, verb, adjective).",
+        },
+        definition: {
+          type: 'string',
+          description: 'Modern definition, ideally 15-120 characters.',
+        },
+        example_sentence: {
+          type: 'string',
+          description: 'Natural example sentence, ideally 2-200 characters.',
+        },
+        etymology: {
+          type: 'string',
+          description: 'Short one-sentence origin under 150 characters, ending with a period.',
+        },
+      },
+      required: ['word', 'part_of_speech', 'definition', 'example_sentence', 'etymology'],
+      additionalProperties: false,
+    }
+  }
+
+  private buildPrompt(avoidList: string[]): string {
+    const avoidancePrompt = avoidList.length
+      ? `Avoid using any of these words: ${avoidList.join(', ')}.`
+      : 'There is no avoidance list for this request.'
+
+    return `
+You are generating a single "Word of the Day" entry for educated adult learners seeking to expand their vocabulary.
+
+Tone: Informative, accessible, and engaging without being condescending.
+
+Requirements:
+- Choose an uncommon but recognizable English word (not in the 3000 most common words, but findable in standard dictionaries).
+- Prioritize words that are useful in everyday discourse, have interesting origins, or are commonly misused.
+- The word must be a real English word in current use.
+- Avoid overly technical, archaic, or domain-specific jargon.
+- Do not use neologisms (unless historically established), profanity, or slurs.
+- ${avoidancePrompt}
+- Identify its full part of speech (for example: noun, verb, adjective).
+- Definition: 15-120 characters (strict), clear, modern, and unambiguous. Should distinguish this word from similar terms.
+- Example sentence: 20-200 characters (strict), clearly demonstrating the word's meaning in a relatable, contemporary context.
+- Etymology: Concise origin story mentioning source language and approximate time period, under 150 characters (strict), ending with a period.
+- Use British English spelling (colour, organise, etc.).
+
+Fill the provided JSON schema fields accordingly.
+`
   }
 
   async find(date: string) {
@@ -37,7 +96,7 @@ export class WotdService {
     return await WotdEntries.query().whereBetween('date', [start.toISODate()!, end.toISODate()!])
   }
 
-  async recentWordsToAvoid(days = 60) {
+  async recentWordsToAvoid(days = WotdService.DEFAULT_AVOIDANCE_DAYS) {
     const end = DateTime.now()
     const start = end.minus({ days })
     const entries = await this.entriesInDateRange(start, end)
@@ -55,11 +114,7 @@ export class WotdService {
 
   async generate(): Promise<Wotd> {
     const avoidList = await this.recentWordsToAvoid()
-
-    const avoidancePrompt = `## Avoidance List
-Do not use any of the following words.
-${avoidList.join(', ')}
-`
+    const instructions = this.buildPrompt(avoidList)
 
     const resp = await this.client.responses.parse({
       model: this.model,
@@ -69,55 +124,7 @@ ${avoidList.join(', ')}
           content: [
             {
               type: 'input_text',
-              text: `# Role and Objective
-Create an engaging "Word of the Day" feature that educates a broad audience, presenting all elements in a structured JSON format.
-
-# Instructions
-- Select an interesting, moderately uncommon English word that would appeal to and educate a broad audience.
-- Avoid using any words included in the provided avoidance list to prevent duplicates (if such a list is supplied).
-- Identify its part of speech (e.g., noun, verb, adjective).
-- Write a clear, modern definition (15-120 characters) that avoids outdated phrases and ambiguous terms.
-- Provide an original, contextual example sentence (20-200 characters).
-- Add a succinct etymology (one sentence, under 150 characters, ending with a period).
-- Use standard UK-neutral spelling conventions.
-- Avoid neologisms unless historically established.
-- Do not include profanity or slurs.
-- Strictly follow the provided JSON schema for output.
-
-# Approach Checklist
-Begin with a concise checklist (3-7 bullets) of what you will do; keep items conceptual, not implementation-level.
-- Choose a word that is moderately uncommon and interesting.
-- Verify part of speech and ensure accuracy; use complete, standard grammatical terms without truncation.
-- Write a precise, modern definition within specified length constraints, avoiding jargon.
-- Draft an original, contextually appropriate example sentence.
-- Summarise etymology succinctly in a single sentence.
-- Format output precisely as defined in the JSON schema.
-
-${avoidancePrompt}
-
-# Output Format
-Produce a single JSON object with the following fields, in order:
-- "word"
-- "part_of_speech"
-- "definition"
-- "example_sentence"
-- "etymology"
-
-Ensure all string values comply with specified length and content constraints.
-Include an # Output Format section specifying exact fields and types:
-# Output Format
-{
-  "word": string,
-  "part_of_speech": string,
-  "definition": string,
-  "example_sentence": string,
-  "etymology": string
-}
-
-# Stop Conditions
-- Generation is complete when a valid JSON object matching the schema and all content guidelines is produced.
-
-(Mandate: Output only the "Word of the Day" entry in the required JSON format.)`,
+              text: instructions,
             },
           ],
         },
@@ -127,43 +134,7 @@ Include an # Output Format section specifying exact fields and types:
           type: 'json_schema',
           name: 'word_of_the_day',
           strict: true,
-          schema: {
-            type: 'object',
-            properties: {
-              word: {
-                type: 'string',
-                description: 'A single vocabulary word.',
-                minLength: 3,
-                maxLength: 15,
-              },
-              part_of_speech: {
-                type: 'string',
-                description: "The word's grammatical role.",
-                minLength: 3,
-                maxLength: 12,
-              },
-              definition: {
-                type: 'string',
-                description: 'Concise dictionary-style definition.',
-                minLength: 15,
-                maxLength: 120,
-              },
-              example_sentence: {
-                type: 'string',
-                description: 'Natural example of correct word usage.',
-                minLength: 20,
-                maxLength: 200,
-              },
-              etymology: {
-                type: 'string',
-                description: 'Short origin/history of the word.',
-                minLength: 15,
-                maxLength: 150,
-              },
-            },
-            required: ['word', 'part_of_speech', 'definition', 'example_sentence', 'etymology'],
-            additionalProperties: false,
-          },
+          schema: this.getWotdSchema(),
         },
         verbosity: 'medium',
       },
