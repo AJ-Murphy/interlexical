@@ -24,6 +24,9 @@ export default class WotdEntries extends BaseModel {
   @column()
   declare etymology: string
 
+  @column()
+  declare pronunciation: string
+
   @column.dateTime({ columnName: 'created_at', autoCreate: true })
   declare createdAt: DateTime
 
