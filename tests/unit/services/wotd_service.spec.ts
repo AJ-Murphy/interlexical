@@ -163,6 +163,7 @@ test.group('store', (group) => {
     const testDate = '2025-12-26'
     const testWotd = {
       word: 'ephemeral',
+      pronunciation: 'ih-FEM-er-ul',
       part_of_speech: 'adjective',
       definition: 'Lasting for a very short time.',
       example_sentence: 'The beauty of cherry blossoms is ephemeral.',
@@ -182,6 +183,7 @@ test.group('store', (group) => {
     const testDate = '2025-12-27'
     const testWotd = {
       word: 'ubiquitous',
+      pronunciation: 'yoo-BIK-wih-tus',
       part_of_speech: 'adjective',
       definition: 'Present, appearing, or found everywhere.',
       example_sentence: 'Smartphones have become ubiquitous in modern society.',
@@ -194,6 +196,7 @@ test.group('store', (group) => {
     assert.properties(result, [
       'date',
       'word',
+      'pronunciation',
       'part_of_speech',
       'definition',
       'example_sentence',

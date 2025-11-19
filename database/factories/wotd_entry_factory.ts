@@ -12,6 +12,7 @@ export const WotdFactory = factory
 
     return {
       word: faker.word[partOfSpeech](),
+      pronunciation: faker.lorem.word(),
       part_of_speech: partOfSpeech,
       definition: faker.lorem.paragraph(2),
       example_sentence: faker.lorem.paragraph(2),
