@@ -5,6 +5,7 @@ import env from '#start/env'
 
 export type Wotd = {
   word: string
+  pronunciation?: string
   part_of_speech: string
   definition: string
   example_sentence: string
@@ -35,6 +36,11 @@ export class WotdService {
           type: 'string',
           description: 'A single English vocabulary word, 3-15 characters.',
         },
+        pronunciation: {
+          type: 'string',
+          description:
+            'Phonetic respelling in British English using simple letter combinations, hyphens between syllables, and CAPS for stressed syllables (e.g., pruh-nun-see-AY-shun).',
+        },
         part_of_speech: {
           type: 'string',
           description: "The word's grammatical role (e.g. noun, verb, adjective).",
@@ -52,7 +58,14 @@ export class WotdService {
           description: 'Short one-sentence origin under 150 characters, ending with a period.',
         },
       },
-      required: ['word', 'part_of_speech', 'definition', 'example_sentence', 'etymology'],
+      required: [
+        'word',
+        'pronunciation',
+        'part_of_speech',
+        'definition',
+        'example_sentence',
+        'etymology',
+      ],
       additionalProperties: false,
     }
   }
@@ -75,6 +88,7 @@ Requirements:
 - Do not use neologisms (unless historically established), profanity, or slurs.
 - ${avoidancePrompt}
 - Identify its full part of speech (for example: noun, verb, adjective).
+- Pronunciation: Provide phonetic respelling in British English using simple letter combinations (like "ee" for long E, "oo" for long U). Use hyphens between syllables and CAPS for the stressed syllable (e.g., serendipity becomes sair-un-DIP-ih-tee, perspicacity becomes pur-spi-KASS-ih-tee).
 - Definition: 15-120 characters (strict), clear, modern, and unambiguous. Should distinguish this word from similar terms.
 - Example sentence: 20-200 characters (strict), clearly demonstrating the word's meaning in a relatable, contemporary context.
 - Etymology: Concise origin story mentioning source language and approximate time period, under 150 characters (strict), ending with a period.
