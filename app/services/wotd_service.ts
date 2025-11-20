@@ -2,6 +2,7 @@ import WotdEntries from '#models/wotd_entries'
 import { DateTime } from 'luxon'
 import OpenAI from 'openai'
 import env from '#start/env'
+import cache from '@adonisjs/cache/services/main'
 
 export type Wotd = {
   word: string
@@ -103,7 +104,14 @@ Fill the provided JSON schema fields accordingly.
   }
 
   async getToday() {
-    return await this.find(this.todayISO())
+    const wotdCache = cache.namespace('wotd')
+    const today = this.todayISO()
+    return await wotdCache.getOrSet({
+      key: today,
+      factory: async () => {
+        return await this.find(today)
+      },
+    })
   }
 
   async entriesInDateRange(start: DateTime, end: DateTime) {
