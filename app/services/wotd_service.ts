@@ -109,7 +109,8 @@ Fill the provided JSON schema fields accordingly.
     return await wotdCache.getOrSet({
       key: today,
       factory: async () => {
-        return await this.find(today)
+        const entry = await this.find(today)
+        return entry.serialize()
       },
     })
   }
