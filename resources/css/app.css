@@ -105,9 +105,9 @@ body {
   background-image: var(--paper-texture-dark);
   color: var(--text);
   display: grid;
-  gap: var(--size-10);
+  gap: var(--size-8);
   justify-content: center;
-  grid-template-rows: 3fr 5fr;
+  grid-template-rows: 2fr 5fr;
 }
 
 .heading {
@@ -157,7 +157,6 @@ body {
 }
 
 blockquote {
-  margin-block: var(--size-5);
   margin-inline: 0;
   padding-inline-start: var(--size-5);
   border-left: var(--border-size-2) solid var(--accent-1);
