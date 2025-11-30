@@ -38,13 +38,13 @@
       color-mix(in srgb, var(--dark) 0.8%, transparent) 4px
     ),
     radial-gradient(
-      circle at 20% 30%, 
-      color-mix(in srgb, var(--dark) 0.4%, transparent) 0%, 
+      circle at 20% 30%,
+      color-mix(in srgb, var(--dark) 0.4%, transparent) 0%,
       transparent 50%
     ),
     radial-gradient(
-      circle at 70% 60%, 
-      color-mix(in srgb, var(--dark) 0.6%, transparent) 0%, 
+      circle at 70% 60%,
+      color-mix(in srgb, var(--dark) 0.6%, transparent) 0%,
       transparent 50%
     );
 
@@ -65,23 +65,23 @@
       color-mix(in srgb, var(--light) 0.8%, transparent) 4px
     ),
     radial-gradient(
-      circle at 30% 40%, 
-      color-mix(in srgb, var(--light) 0.4%, transparent) 0%, 
+      circle at 30% 40%,
+      color-mix(in srgb, var(--light) 0.4%, transparent) 0%,
       transparent 50%
     ),
     radial-gradient(
-      circle at 65% 70%, 
-      color-mix(in srgb, var(--light) 0.6%, transparent) 0%, 
+      circle at 65% 70%,
+      color-mix(in srgb, var(--light) 0.6%, transparent) 0%,
       transparent 50%
     );
 
   /* Starry background pattern */
   --star-background:
-    radial-gradient( 1px 1px at 20px 30px, var(--light), transparent ), 
-    radial-gradient( 1px 1px at 40px 70px, var(--light), transparent ), 
-    radial-gradient( 1px 1px at 90px 40px, var(--light), transparent ), 
-    radial-gradient( 1px 1px at 130px 80px, var(--light), transparent ), 
-    radial-gradient( 2px 2px at 160px 30px, var(--light), transparent ), 
+    radial-gradient( 1px 1px at 20px 30px, var(--light), transparent ),
+    radial-gradient( 1px 1px at 40px 70px, var(--light), transparent ),
+    radial-gradient( 1px 1px at 90px 40px, var(--light), transparent ),
+    radial-gradient( 1px 1px at 130px 80px, var(--light), transparent ),
+    radial-gradient( 2px 2px at 160px 30px, var(--light), transparent ),
     var(--surface-dark);
 }
 
