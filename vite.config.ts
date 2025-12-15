@@ -18,12 +18,18 @@ export default defineConfig({
     }),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: null,
       devOptions: { enabled: true },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
         name: 'Interlexical',
         short_name: 'Interlexical',
-        description: 'Interlexical',
+        description: 'Your daily word exploration app',
+        start_url: '/',
+        scope: '/',
+        display: 'standalone',
+        background_color: '#0f1b26',
+        theme_color: '#0f1b26',
         icons: [
           {
             src: 'pwa-64x64.png',
