@@ -17,14 +17,6 @@ export default class TodaysController {
     response.header('Expires', midnight.toHTTP()!)
   }
 
-  async find({ response }: HttpContext) {
-    const wotdService = new WotdService()
-    const wotd = await wotdService.getToday()
-
-    this.setCacheHeaders(response)
-    return response.ok(wotd)
-  }
-
   async show({ response, view }: HttpContext) {
     const service = new WotdService()
     const wotd = await service.getToday()
