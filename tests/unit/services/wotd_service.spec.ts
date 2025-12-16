@@ -2,6 +2,8 @@ import { test } from '@japa/runner'
 import { WotdService } from '#services/wotd_service'
 import { DateTime } from 'luxon'
 import testUtils from '@adonisjs/core/services/test_utils'
+import sinon from 'sinon'
+import WotdEntries from '#models/wotd_entries'
 
 test.group('todayISO', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
@@ -202,5 +204,284 @@ test.group('store', (group) => {
       'example_sentence',
       'etymology',
     ])
+  })
+})
+
+test.group('buildPrompt', (group) => {
+  group.each.setup(() => testUtils.db().withGlobalTransaction())
+
+  test('includes avoidance list when words are provided', async ({ assert }) => {
+    const service = new WotdService()
+    const avoidList = ['serendipity', 'ephemeral', 'ubiquitous']
+
+    const prompt = (service as any).buildPrompt(avoidList)
+
+    assert.include(prompt, 'Avoid using any of these words:')
+    assert.include(prompt, 'serendipity')
+    assert.include(prompt, 'ephemeral')
+    assert.include(prompt, 'ubiquitous')
+  })
+
+  test('shows no avoidance list message when empty array provided', async ({ assert }) => {
+    const service = new WotdService()
+    const emptyList: string[] = []
+
+    const prompt = (service as any).buildPrompt(emptyList)
+
+    assert.include(prompt, 'There is no avoidance list for this request')
+    assert.notInclude(prompt, 'Avoid using any of these words:')
+  })
+
+  test('includes all required prompt sections', async ({ assert }) => {
+    const service = new WotdService()
+    const prompt = (service as any).buildPrompt([])
+
+    // Verify key sections are present
+    assert.include(prompt, 'Word of the Day')
+    assert.include(prompt, 'Tone:')
+    assert.include(prompt, 'Requirements:')
+    assert.include(prompt, 'part of speech')
+    assert.include(prompt, 'Pronunciation:')
+    assert.include(prompt, 'Definition:')
+    assert.include(prompt, 'Example sentence:')
+    assert.include(prompt, 'Etymology:')
+    assert.include(prompt, 'British English')
+  })
+})
+
+test.group('getWotdSchema', (group) => {
+  group.each.setup(() => testUtils.db().withGlobalTransaction())
+
+  test('returns valid JSON schema structure', async ({ assert }) => {
+    const service = new WotdService()
+    const schema = (service as any).getWotdSchema()
+
+    assert.equal(schema.type, 'object')
+    assert.exists(schema.properties)
+    assert.exists(schema.required)
+    assert.isFalse(schema.additionalProperties)
+  })
+
+  test('has all required WOTD fields in schema', async ({ assert }) => {
+    const service = new WotdService()
+    const schema = (service as any).getWotdSchema()
+
+    const expectedFields = [
+      'word',
+      'pronunciation',
+      'part_of_speech',
+      'definition',
+      'example_sentence',
+      'etymology',
+    ]
+
+    for (const field of expectedFields) {
+      assert.property(schema.properties, field)
+      assert.include(schema.required, field)
+    }
+  })
+
+  test('schema fields have descriptions', async ({ assert }) => {
+    const service = new WotdService()
+    const schema = (service as any).getWotdSchema()
+
+    const fields = [
+      'word',
+      'pronunciation',
+      'part_of_speech',
+      'definition',
+      'example_sentence',
+      'etymology',
+    ]
+
+    for (const field of fields) {
+      assert.property(schema.properties[field], 'description')
+      assert.isString(schema.properties[field].description)
+      assert.isAtLeast(schema.properties[field].description.length, 10)
+    }
+  })
+})
+
+test.group('storeToday', (group) => {
+  group.each.setup(() => testUtils.db().withGlobalTransaction())
+
+  test('generates and stores WOTD for today', async ({ assert }) => {
+    const service = new WotdService()
+    const mockWotd = {
+      word: 'perspicacity',
+      pronunciation: 'pur-spi-KASS-ih-tee',
+      part_of_speech: 'noun',
+      definition: 'The quality of having keen insight or judgment.',
+      example_sentence: 'Her perspicacity in business matters was legendary.',
+      etymology: 'From Latin perspicax, meaning sharp-sighted.',
+    }
+
+    // Delete today's entry if it exists (from seeder)
+    const today = DateTime.now().setZone('Europe/London').toISODate()!
+    await WotdEntries.query().where('date', today).delete()
+
+    // Stub the generate method to avoid actual API calls
+    const generateStub = sinon.stub(service as any, 'generate').resolves(mockWotd)
+
+    try {
+      const result = await service.storeToday()
+
+      // Verify generate was called
+      assert.isTrue(generateStub.calledOnce)
+
+      // Verify the result has the expected word
+      assert.equal(result.word, mockWotd.word)
+
+      // Verify it was stored with today's date
+      assert.equal(result.date, today)
+
+      // Verify all properties were stored
+      assert.equal(result.pronunciation, mockWotd.pronunciation)
+      assert.equal(result.part_of_speech, mockWotd.part_of_speech)
+      assert.equal(result.definition, mockWotd.definition)
+      assert.equal(result.example_sentence, mockWotd.example_sentence)
+      assert.equal(result.etymology, mockWotd.etymology)
+    } finally {
+      generateStub.restore()
+    }
+  })
+
+  test("uses today's date in London timezone", async ({ assert }) => {
+    const service = new WotdService()
+    const mockWotd = {
+      word: 'test',
+      pronunciation: 'test',
+      part_of_speech: 'noun',
+      definition: 'test definition',
+      example_sentence: 'test sentence',
+      etymology: 'test etymology',
+    }
+
+    // Delete today's entry if it exists
+    const today = DateTime.now().setZone('Europe/London').toISODate()!
+    await WotdEntries.query().where('date', today).delete()
+
+    const generateStub = sinon.stub(service as any, 'generate').resolves(mockWotd)
+
+    try {
+      const result = await service.storeToday()
+      const expectedDate = DateTime.now().setZone('Europe/London').toISODate()!
+
+      assert.equal(result.date, expectedDate)
+    } finally {
+      generateStub.restore()
+    }
+  })
+})
+
+test.group('generate', (group) => {
+  group.each.setup(() => testUtils.db().withGlobalTransaction())
+
+  test('calls recentWordsToAvoid to build avoidance list', async ({ assert }) => {
+    const service = new WotdService()
+    const mockWotd = {
+      word: 'eloquence',
+      pronunciation: 'EL-uh-kwens',
+      part_of_speech: 'noun',
+      definition: 'Fluent or persuasive speaking or writing.',
+      example_sentence: "The speaker's eloquence captivated the audience.",
+      etymology: 'From Latin eloquentia, meaning speaking out.',
+    }
+
+    // Stub the recentWordsToAvoid method
+    const recentWordsStub = sinon.stub(service, 'recentWordsToAvoid').resolves(['test', 'word'])
+
+    // Mock the OpenAI client
+    const mockClient = {
+      responses: {
+        parse: sinon.stub().resolves({
+          output_parsed: mockWotd,
+        }),
+      },
+    }
+    ;(service as any).client = mockClient
+
+    try {
+      const result = await service.generate()
+
+      // Verify recentWordsToAvoid was called
+      assert.isTrue(recentWordsStub.calledOnce)
+
+      // Verify the result matches the mock
+      assert.deepEqual(result, mockWotd)
+    } finally {
+      recentWordsStub.restore()
+    }
+  })
+
+  test('passes correct parameters to OpenAI API', async ({ assert }) => {
+    const service = new WotdService()
+    const mockWotd = {
+      word: 'verisimilitude',
+      pronunciation: 'ver-ih-sih-MIL-ih-tood',
+      part_of_speech: 'noun',
+      definition: 'The appearance of being true or real.',
+      example_sentence: "The novel's verisimilitude made it feel authentic.",
+      etymology: 'From Latin verisimilitudo, meaning likeness to truth.',
+    }
+
+    // Stub recentWordsToAvoid
+    sinon.stub(service, 'recentWordsToAvoid').resolves(['avoid1', 'avoid2'])
+
+    // Mock the OpenAI client with a spy
+    const parseStub = sinon.stub().resolves({
+      output_parsed: mockWotd,
+    })
+    const mockClient = {
+      responses: {
+        parse: parseStub,
+      },
+    }
+    ;(service as any).client = mockClient
+
+    await service.generate()
+
+    // Verify parse was called once
+    assert.isTrue(parseStub.calledOnce)
+
+    // Get the call arguments
+    const callArgs = parseStub.firstCall.args[0]
+
+    // Verify key parameters
+    assert.equal(callArgs.model, 'gpt-5-nano')
+    assert.exists(callArgs.input)
+    assert.exists(callArgs.text)
+    assert.equal(callArgs.text.format.type, 'json_schema')
+    assert.equal(callArgs.text.format.name, 'word_of_the_day')
+    assert.isTrue(callArgs.text.format.strict)
+    assert.exists(callArgs.text.format.schema)
+  })
+
+  test('returns parsed WOTD object from API response', async ({ assert }) => {
+    const service = new WotdService()
+    const expectedWotd = {
+      word: 'tenacious',
+      pronunciation: 'teh-NAY-shus',
+      part_of_speech: 'adjective',
+      definition: 'Holding firmly to a purpose or opinion; persistent.',
+      example_sentence: 'The tenacious researcher refused to give up on the project.',
+      etymology: 'From Latin tenax, meaning holding fast or gripping.',
+    }
+
+    // Stub dependencies
+    sinon.stub(service, 'recentWordsToAvoid').resolves([])
+
+    const mockClient = {
+      responses: {
+        parse: sinon.stub().resolves({
+          output_parsed: expectedWotd,
+        }),
+      },
+    }
+    ;(service as any).client = mockClient
+
+    const result = await service.generate()
+
+    assert.deepEqual(result, expectedWotd)
   })
 })
