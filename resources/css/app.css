@@ -147,7 +147,7 @@ body {
 .container {
   display: grid;
   gap: var(--size-3);
-  width: var(--size-content-3);
+  max-width: var(--size-content-3);
   margin-inline: var(--size-3);
   text-wrap: pretty;
 }
