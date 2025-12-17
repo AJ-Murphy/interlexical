@@ -1,4 +1,4 @@
-@import "open-props/style";
+@import 'open-props/style';
 
 :root {
   --light: #f5e8d1;
@@ -148,6 +148,7 @@ body {
   gap: var(--size-3);
   max-width: var(--size-content-3);
   margin-inline: var(--size-3);
+  text-wrap: pretty;
 }
 
 blockquote {
