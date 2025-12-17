@@ -147,7 +147,7 @@ body {
 .container {
   display: grid;
   gap: var(--size-3);
-  max-width: var(--size-content-3);
+  width: var(--size-content-3);
   margin-inline: var(--size-3);
   text-wrap: pretty;
 }
@@ -174,31 +174,8 @@ blockquote {
 }
 
 .heading__title--broken > * {
-  --n: 0;
   display: inline-block;
   animation: var(--animation-float);
+  /* Mexican wave - --n is set inline in HTML */
   animation-delay: calc(var(--n) * 0.1s);
 }
-
-.heading__title--broken > * + * {
-  --n: calc(var(--n) + 1)
-}
-
-
-/*.heading__title--broken > * {
-  --n: 0;
-}*/
-
-/* Mexican wave - stagger delays for each letter */
-/*.heading__title--broken > *:nth-child(1) { --n: 0; }
-.heading__title--broken > *:nth-child(2) { --n: 1; }
-.heading__title--broken > *:nth-child(3) { --n: 2; }
-.heading__title--broken > *:nth-child(4) { --n: 3; }
-.heading__title--broken > *:nth-child(5) { --n: 4; }
-.heading__title--broken > *:nth-child(6) { --n: 5; }
-.heading__title--broken > *:nth-child(7) { --n: 6; }
-.heading__title--broken > *:nth-child(8) { --n: 7; }
-.heading__title--broken > *:nth-child(9) { --n: 8; }
-.heading__title--broken > *:nth-child(10) { --n: 9; }
-.heading__title--broken > *:nth-child(11) { --n: 10; }
-.heading__title--broken > *:nth-child(12) { --n: 11; }*/
