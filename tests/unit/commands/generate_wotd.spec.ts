@@ -27,7 +27,7 @@ test.group('generate:wotd command', (group) => {
     }
 
     // Stub the storeToday method to avoid API calls
-    const storeTodayStub = sinon.stub(WotdService.prototype, 'storeToday').resolves(mockWotd)
+    const storeTodayStub = sinon.stub(WotdService.prototype, 'storeToday').resolves(mockWotd as any)
 
     try {
       const command = await ace.create(GenerateWotd, [])
@@ -54,7 +54,7 @@ test.group('generate:wotd command', (group) => {
       date: '2025-12-16',
     }
 
-    const storeTodayStub = sinon.stub(WotdService.prototype, 'storeToday').resolves(mockWotd)
+    const storeTodayStub = sinon.stub(WotdService.prototype, 'storeToday').resolves(mockWotd as any)
 
     try {
       const command = await ace.create(GenerateWotd, [])
@@ -78,7 +78,7 @@ test.group('generate:wotd command', (group) => {
       date: '2025-12-16',
     }
 
-    const storeTodayStub = sinon.stub(WotdService.prototype, 'storeToday').resolves(mockWotd)
+    const storeTodayStub = sinon.stub(WotdService.prototype, 'storeToday').resolves(mockWotd as any)
 
     try {
       const command = await ace.create(GenerateWotd, [])
@@ -102,7 +102,7 @@ test.group('generate:wotd command', (group) => {
       date: '2025-12-16',
     }
 
-    const storeTodayStub = sinon.stub(WotdService.prototype, 'storeToday').resolves(mockWotd)
+    const storeTodayStub = sinon.stub(WotdService.prototype, 'storeToday').resolves(mockWotd as any)
 
     try {
       const command = await ace.create(GenerateWotd, [])
