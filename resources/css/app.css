@@ -156,3 +156,17 @@ blockquote {
   border-left: var(--border-size-2) solid var(--accent-1);
   color: var(--text-dark);
 }
+
+/* Animations on load using @starting-style */
+@layer {
+  main {
+    @media (prefers-reduced-motion: no-preference) {
+      transition: opacity 0.5s var(--ease-in-5);
+    }
+
+    /* stage enter - initial state */
+    @starting-style {
+      opacity: 0;
+    }
+  }
+}
