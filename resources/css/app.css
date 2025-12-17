@@ -12,14 +12,8 @@
   --text-light: var(--light);
   --text-dark: var(--dark);
   --text-outline-dark:
-    1px 0 var(--dark),
-    -1px 0 var(--dark),
-    0 1px var(--dark),
-    0 -1px var(--dark),
-    1px 1px var(--dark),
-    -1px 1px var(--dark),
-    1px -1px var(--dark),
-    -1px -1px var(--dark);
+    1px 0 var(--dark), -1px 0 var(--dark), 0 1px var(--dark), 0 -1px var(--dark),
+    1px 1px var(--dark), -1px 1px var(--dark), 1px -1px var(--dark), -1px -1px var(--dark);
 
   /* Paper texture overlay (dark variant for light backgrounds) */
   --paper-texture-dark:
@@ -77,12 +71,11 @@
 
   /* Starry background pattern */
   --star-background:
-    radial-gradient( 1px 1px at 20px 30px, var(--light), transparent ),
-    radial-gradient( 1px 1px at 40px 70px, var(--light), transparent ),
-    radial-gradient( 1px 1px at 90px 40px, var(--light), transparent ),
-    radial-gradient( 1px 1px at 130px 80px, var(--light), transparent ),
-    radial-gradient( 2px 2px at 160px 30px, var(--light), transparent ),
-    var(--surface-dark);
+    radial-gradient(1px 1px at 20px 30px, var(--light), transparent),
+    radial-gradient(1px 1px at 40px 70px, var(--light), transparent),
+    radial-gradient(1px 1px at 90px 40px, var(--light), transparent),
+    radial-gradient(1px 1px at 130px 80px, var(--light), transparent),
+    radial-gradient(2px 2px at 160px 30px, var(--light), transparent), var(--surface-dark);
 }
 
 * {
@@ -115,7 +108,8 @@ body {
   color: var(--text-light);
   display: grid;
   place-content: center;
-  border-radius: var(--radius-1) var(--radius-1) var(--radius-conditional-3) var(--radius-conditional-3);
+  border-radius: var(--radius-1) var(--radius-1) var(--radius-conditional-3)
+    var(--radius-conditional-3);
   position: relative;
   background: var(--star-background);
   background-repeat: repeat;
@@ -124,7 +118,7 @@ body {
 
 /* Subtle paper texture overlay */
 .heading::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
