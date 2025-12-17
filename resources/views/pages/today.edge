@@ -1,0 +1,22 @@
+@layout.app({ title: 'Interlexical - Word of the Day' })
+
+@slot('main')
+  <header class="heading">
+    <h1 class="heading__title">Interlexical</h1>
+      <p class="heading__subtitle">Word of the Day</p>
+  </header>
+  
+  <main>
+    <article class="container">
+    <h2 class="container__title">{{ wotd.word }}</h1>
+      @if(wotd.pronunciation)
+      <p class="container__text">{{ wotd.pronunciation }}</p>
+      @endif
+      <i class="container__text">{{ wotd.partOfSpeech }}</i>
+      <p class="container__text">{{ wotd.definition }}</p>
+        <blockquote class="container__text">{{ wotd.exampleSentence }}</blockquote>
+      <p class="container__text">{{ wotd.etymology }}</p>
+    </article>
+  </main>
+@endslot
+@end

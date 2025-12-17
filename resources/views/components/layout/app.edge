@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="{{ description || 'Discover a new word every day with Interlexical. Your daily word exploration app for expanding vocabulary and learning language.' }}">
+  <title>{{ title || 'Interlexical - Word of the Day' }}</title>
+  <meta name="theme-color" content="#0f1b26">
+  @vite(['resources/css/app.css'])
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/interlexical.svg" sizes="any" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png">
+  <link rel="manifest" href="/assets/manifest.webmanifest">
+
+  @if($slots.head)
+    {{{ await $slots.head() }}}
+  @endif
+</head>
+<body>
+  {{{ await $slots.main() }}}
+</body>
+</html>

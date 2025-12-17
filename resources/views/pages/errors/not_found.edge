@@ -1,8 +1,16 @@
-<h1>
-  404 - Page not found
-</h1>
-<p>
-  This template is rendered by the
-  <a href="http://docs.adonisjs.com/guides/exception-handling#status-pages">status pages feature</a>
-  of the global exception handler.
-</p>
+@layout.app({ title: '404 - Page not found - Interlexical' })
+
+@slot('main')
+  <header class="heading">
+    <h1 class="heading__title">Interlexical</h1>
+      <p class="heading__subtitle">Word of the Day</p>
+  </header>
+  
+  <main>
+    <article class="container">
+      <h2>404 - Page not found</h2>
+      <p>The page you're looking for doesn't exist.</p>
+    </article>
+  </main>
+@endslot
+@end

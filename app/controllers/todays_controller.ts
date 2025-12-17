@@ -22,6 +22,6 @@ export default class TodaysController {
     const wotd = await service.getToday()
 
     this.setCacheHeaders(response)
-    return view.render('today', { wotd })
+    return view.render('pages/today', { wotd })
   }
 }
