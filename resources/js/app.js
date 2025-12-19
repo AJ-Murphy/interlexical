@@ -1,10 +1,3 @@
-// Register service worker for PWA
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/assets/sw.js', { scope: '/' })
-  })
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   const pronounceBtn = document.getElementById('pronounce-btn')
 
