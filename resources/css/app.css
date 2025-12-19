@@ -152,11 +152,52 @@ body {
   text-wrap: pretty;
 }
 
+.container__header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--size-2);
+}
+
 blockquote {
   margin-inline: 0;
   padding-inline-start: var(--size-5);
   border-left: var(--border-size-2) solid var(--accent-1);
   color: var(--text-dark);
+}
+
+/* Icon Button Utilities */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: var(--size-2);
+  cursor: pointer;
+  color: var(--text-dark);
+  border-radius: var(--radius-2);
+  transition:
+    background-color 0.2s var(--ease-2),
+    color 0.2s var(--ease-2);
+}
+
+.btn-icon:hover {
+  color: var(--accent-1);
+}
+
+.btn-icon:active {
+  transform: scale(0.95);
+}
+
+.btn-icon:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+.btn-icon svg {
+  /*display: block;*/
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 /* Animations on load using @starting-style */

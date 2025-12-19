@@ -8,7 +8,12 @@
   
   <main>
     <article class="container">
+      <div class="container__header">
     <h2 class="container__title">{{ wotd.word }}</h1>
+      <button class="btn-icon" aria-label="Play pronunciation" data-word="{{ wotd.word }}" id="pronounce-btn">
+        @svg('mi:volume-up')
+      </button>
+      </div>
       @if(wotd.pronunciation)
       <p class="container__text">{{ wotd.pronunciation }}</p>
       @endif
