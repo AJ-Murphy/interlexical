@@ -196,8 +196,8 @@ blockquote {
 
 .btn-icon svg {
   /*display: block;*/
-  width: 1.5rem;
-  height: 1.5rem;
+  width: var(--font-size-fluid-1);
+  height: var(--font-size-fluid-1);
 }
 
 /* Animations on load using @starting-style */
