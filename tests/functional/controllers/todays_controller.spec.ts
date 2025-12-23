@@ -31,7 +31,7 @@ test.group('TodaysController - GET /', (group) => {
     // Extract max-age value
     const maxAgeMatch = headers['cache-control'].match(/max-age=(\d+)/)
     assert.exists(maxAgeMatch)
-    const maxAge = parseInt(maxAgeMatch![1])
+    const maxAge = Number.parseInt(maxAgeMatch![1])
 
     // Verify max-age is reasonable (0 to 86400 seconds - 24 hours)
     assert.isAtLeast(maxAge, 0)
@@ -58,7 +58,7 @@ test.group('TodaysController - GET /', (group) => {
 
     const headers = response.headers()
     const maxAgeMatch = headers['cache-control'].match(/max-age=(\d+)/)
-    const actualMaxAge = parseInt(maxAgeMatch![1])
+    const actualMaxAge = Number.parseInt(maxAgeMatch![1])
 
     // Allow 5 second tolerance for test execution time
     assert.approximately(actualMaxAge, expectedSecondsUntilMidnight, 5)
