@@ -162,7 +162,7 @@ test.group('store', (group) => {
 
   test('persists entry to database', async ({ assert }) => {
     const service = new WotdService()
-    const testDate = '2025-12-26'
+    const testDate = '2025-01-01'
     const testWotd = {
       word: 'ephemeral',
       pronunciation: 'ih-FEM-er-ul',
@@ -182,7 +182,7 @@ test.group('store', (group) => {
 
   test('stores all wotd properties correctly', async ({ assert }) => {
     const service = new WotdService()
-    const testDate = '2025-12-27'
+    const testDate = '2025-01-02'
     const testWotd = {
       word: 'ubiquitous',
       pronunciation: 'yoo-BIK-wih-tus',
