@@ -9,10 +9,10 @@ const shieldConfig = defineConfig({
     enabled: true,
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
+      scriptSrc: ["'self'", 'http://localhost:*'],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", 'data:'],
-      connectSrc: ["'self'"],
+      connectSrc: ["'self'", 'ws://localhost:*', 'http://localhost:*'],
     },
     reportOnly: false,
   },
