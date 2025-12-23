@@ -2,6 +2,8 @@
 
 Your daily word exploration app. A Progressive Web Application that delivers a new vocabulary word every day, complete with pronunciation, definition, etymology, and example usage.
 
+**Live site**: [interlexical.app](https://interlexical.app)
+
 ## Getting Started
 
 Interlexical is built with AdonisJS v6 and uses PostgreSQL for data storage. Words are generated using OpenAI's GPT-5-nano model with British English pronunciation support.
