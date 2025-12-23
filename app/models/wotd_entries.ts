@@ -5,7 +5,6 @@ export default class WotdEntries extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
-  // Store the ISO date (YYYY-MM-DD). Using string keeps it simple across SQLite/Postgres.
   @column()
   declare date: string
 

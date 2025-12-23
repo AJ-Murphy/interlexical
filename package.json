@@ -72,7 +72,6 @@
     "@adonisjs/vite": "^4.0.0",
     "@iconify-json/mi": "^1.2.2",
     "@vinejs/vine": "^3.0.1",
-    "better-sqlite3": "^12.2.0",
     "edge-iconify": "^2.0.1",
     "edge.js": "^6.2.1",
     "luxon": "^3.7.1",
@@ -87,10 +86,5 @@
       "./app/middleware/*.ts"
     ]
   },
-  "prettier": "@adonisjs/prettier-config",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "better-sqlite3"
-    ]
-  }
+  "prettier": "@adonisjs/prettier-config"
 }
