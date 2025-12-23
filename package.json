@@ -1,6 +1,12 @@
 {
   "name": "interlexical",
   "version": "0.0.0",
+  "description": "Your daily word exploration app",
+  "author": "Adam Murphy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AJ-Murphy/interlexical.git"
+  },
   "private": true,
   "type": "module",
   "license": "MIT",
