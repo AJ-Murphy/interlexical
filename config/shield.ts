@@ -6,8 +6,14 @@ const shieldConfig = defineConfig({
    * to learn more
    */
   csp: {
-    enabled: false,
-    directives: {},
+    enabled: true,
+    directives: {
+      defaultSrc: ["'self'", '@viteUrl'],
+      scriptSrc: ["'self'", '@viteUrl'],
+      styleSrc: ["'self'", '@viteUrl', "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:'],
+      connectSrc: ["'self'", '@viteUrl', '@viteHmrUrl'],
+    },
     reportOnly: false,
   },
 
