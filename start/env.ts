@@ -34,5 +34,5 @@ export default await Env.create(new URL('../', import.meta.url), {
 
   PG_PASSWORD: Env.schema.string(),
 
-  PG_PORT: Env.schema.number()
+  PG_PORT: Env.schema.number(),
 })

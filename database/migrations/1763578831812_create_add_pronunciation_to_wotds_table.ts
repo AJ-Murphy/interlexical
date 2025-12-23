@@ -8,5 +8,4 @@ export default class extends BaseSchema {
       table.string('pronunciation', 128).nullable()
     })
   }
-
 }

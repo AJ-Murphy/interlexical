@@ -18,22 +18,26 @@ Interlexical is built with AdonisJS v6 and uses PostgreSQL for data storage. Wor
 ### Installation
 
 1. Clone the repository
+
    ```bash
    git clone https://github.com/AJ-Murphy/interlexical.git
    cd interlexical
    ```
 
 2. Install dependencies
+
    ```bash
    pnpm install
    ```
 
 3. Set up environment variables
+
    ```bash
    cp .env.example .env
    ```
 
 4. Edit `.env` and configure the following:
+
    ```env
    APP_KEY=<generate with: node ace generate:key>
    NODE_ENV=development
@@ -50,11 +54,13 @@ Interlexical is built with AdonisJS v6 and uses PostgreSQL for data storage. Wor
    ```
 
 5. Create database
+
    ```bash
    createdb <your-db-name>
    ```
 
 6. Run migrations
+
    ```bash
    node ace migration:run
    ```

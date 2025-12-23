@@ -1,15 +1,23 @@
 @layout.app({ title: error.code + ' - Server error - Interlexical' })
 
-@slot('main')
-  <header class="heading">
-    <h1 class="heading__title">Interlexical</h1>
-    <p class="heading__subtitle">Word of the Day</p>
-  </header>
+  @slot('main')
+    <header class="heading">
+      <h1 class="heading__title">
+        Interlexical
+      </h1>
+      <p class="heading__subtitle">
+        Word of the Day
+      </p>
+    </header>
 
-  <main>
-    <article class="container">
-      <h2>{{ error.code }} - Server error</h2>
-      <p>Something went wrong on our end. Please try again later.</p>
-    </article>
-  </main>
-@end
+    <main>
+      <article class="container">
+        <h2>
+          {{ error.code }} - Server error
+        </h2>
+        <p>
+          Something went wrong on our end. Please try again later.
+        </p>
+      </article>
+    </main>
+  @end
