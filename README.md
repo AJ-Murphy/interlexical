@@ -135,6 +135,7 @@ docker run -p 8080:8080 --env-file .env interlexical
 - Built with [AdonisJS](https://adonisjs.com)
 - Word generation powered by [OpenAI](https://openai.com)
 - Styled with [Open Props](https://open-props.style)
+- Icons from [Mono Icons](https://github.com/mono-company/mono-icons)
 - Color scheme from [Baldur Neon Darkness](https://lospec.com/palette-list/baldur-neon-darkness)
 
 ### License
