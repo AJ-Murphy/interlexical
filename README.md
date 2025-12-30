@@ -53,16 +53,26 @@ Interlexical is built with AdonisJS v6 and uses PostgreSQL for data storage. Wor
    PG_PORT=5432
    ```
 
-5. Create database
+5. Set up PostgreSQL database with Docker
 
    ```bash
-   createdb <your-db-name>
+   # Pull PostgreSQL image
+   docker pull postgres
+
+   # Start PostgreSQL container
+   docker run --name interlexical -p 5432:5432 \
+     -e POSTGRES_USER=<your-user> \
+     -e POSTGRES_PASSWORD=<your-password> \
+     -d postgres
+
+   # Create the database
+   docker exec -i interlexical psql -U <your-user> -c "CREATE DATABASE <your-db-name>;"
    ```
 
 6. Run migrations
 
    ```bash
-   node ace migration:run
+   node ace migration:fresh
    ```
 
 7. (Optional) Seed the database with 15 days of sample data
