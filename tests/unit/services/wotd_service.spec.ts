@@ -33,7 +33,7 @@ test.group('find', (group) => {
     const today = DateTime.now().setZone('Europe/London').startOf('day')
 
     const result = await service.find(today.toISODate()!)
-    const resultDate = DateTime.fromJSDate(new Date(result.date)).setZone('Europe/London')
+    const resultDate = DateTime.fromISO(result.date).setZone('Europe/London')
 
     assert.isTrue(resultDate.hasSame(today, 'day'))
   })
@@ -54,7 +54,7 @@ test.group('getToday', (group) => {
     const today = DateTime.now().setZone('Europe/London').startOf('day')
 
     const result = await service.getToday()
-    const resultDate = DateTime.fromJSDate(new Date(result.date)).setZone('Europe/London')
+    const resultDate = DateTime.fromISO(result.date).setZone('Europe/London')
 
     assert.isTrue(resultDate.hasSame(today, 'day'))
   })
@@ -74,12 +74,10 @@ test.group('entriesInDateRange', (group) => {
     assert.isArray(results)
     assert.isAtLeast(results.length, 1)
 
-    // Verify all returned entries are within the range
     for (const entry of results) {
-      const entryDate = DateTime.fromJSDate(new Date(entry.date))
       assert.isTrue(
-        entryDate >= start && entryDate <= end,
-        `Entry date ${entryDate.toISODate()} should be between ${start.toISODate()} and ${end.toISODate()}`
+        entry.date >= start.toISODate()! && entry.date <= end.toISODate()!,
+        `Entry date ${entry.date} should be between ${start.toISODate()} and ${end.toISODate()}`
       )
     }
   })
@@ -105,7 +103,7 @@ test.group('entriesInDateRange', (group) => {
 
     // Verify that today's entry is not included
     const todayIncluded = results.some((entry) => {
-      const entryDate = DateTime.fromJSDate(new Date(entry.date))
+      const entryDate = DateTime.fromISO(entry.date)
       return entryDate.hasSame(today, 'day')
     })
 

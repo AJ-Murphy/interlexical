@@ -1,3 +1,4 @@
+import WotdEntries from '#models/wotd_entries'
 import { WotdFactory } from '#database/factories/wotd_entry_factory'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import { DateTime } from 'luxon'
@@ -14,6 +15,9 @@ export default class extends BaseSeeder {
     const futureDates = Array.from({ length: DATES_RANGE }, (_, i) =>
       today.plus({ days: i + 1 }).toISODate()
     )
+
+    const allDates = [...pastDates, today.toISODate(), ...futureDates] as string[]
+    await WotdEntries.query().whereIn('date', allDates).delete()
 
     for (const date of pastDates) {
       await WotdFactory.merge({ date }).create()

@@ -5,7 +5,10 @@ export default class WotdEntries extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
-  @column()
+  @column({
+    consume: (value: Date | string) =>
+      value instanceof Date ? value.toISOString().split('T')[0] : value,
+  })
   declare date: string
 
   @column()
