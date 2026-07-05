@@ -125,7 +125,7 @@ Build and run with Docker:
 
 ```bash
 docker build -t interlexical .
-docker run -p 8080:8080 --env-file .env interlexical
+docker run -p 3333:3333 --env-file .env interlexical
 ```
 
 ## Deployment
