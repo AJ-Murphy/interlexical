@@ -1,39 +1,37 @@
-# 1) Builder
-FROM node:22-alpine AS build
+FROM node:lts-bookworm-slim AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
+# ----------------------------
+# Stage 1: Install all dependencies
+# ----------------------------
+FROM base AS deps
 WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-# keep dev deps for build
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --frozen-lockfile
+
+# ----------------------------
+# Stage 2: Build the application
+# ----------------------------
+FROM deps AS build
+WORKDIR /app
 COPY . .
-
-# Build backend + Vite assets (Adonis v6 writes to ./build and ./build/public)
 RUN node ace build
-# If you also have a "build" script that runs Vite explicitly, keep it:
-# RUN pnpm run build
 
-# 2) Runtime
-FROM node:22-alpine AS runtime
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
-
+# ----------------------------
+# Stage 3: Production runtime
+# ----------------------------
+FROM base AS production
 WORKDIR /app
 ENV NODE_ENV=production
-ENV HOST=0.0.0.0
-ENV PORT=8080
 
-# install prod deps only
-COPY package.json pnpm-lock.yaml ./
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --prod
+COPY --from=build /app/build ./
+COPY pnpm-workspace.yaml ./
 
-# copy compiled app and static assets
-COPY --from=build /app/build ./build
-# also expose public so Edge/Vite can read the manifest path at runtime
-COPY --from=build /app/build/public ./public
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --prod --frozen-lockfile
 
-EXPOSE 8080
-CMD ["node", "./build/bin/server.js"]
+EXPOSE 3333
+CMD ["node", "bin/server.js"]
