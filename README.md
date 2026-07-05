@@ -10,7 +10,7 @@ Interlexical is built with AdonisJS v6 and uses PostgreSQL for data storage. Wor
 
 ### Prerequisites
 
-- Node.js 18+ (LTS recommended)
+- Node.js 24+ (LTS recommended)
 - PostgreSQL 14+
 - pnpm package manager
 - OpenAI API key
