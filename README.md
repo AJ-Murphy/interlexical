@@ -110,15 +110,6 @@ Run the full test suite with coverage:
 pnpm test
 ```
 
-### Production Build
-
-Build the application for production:
-
-```bash
-pnpm build
-pnpm start
-```
-
 ### Docker
 
 Build and run with Docker:
