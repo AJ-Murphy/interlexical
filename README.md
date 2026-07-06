@@ -60,13 +60,13 @@ Interlexical is built with AdonisJS v6 and uses PostgreSQL for data storage. Wor
    docker pull postgres
 
    # Start PostgreSQL container
-   docker run --name interlexical -p 5432:5432 \
+   docker run --name interlexical-db -p 5432:5432 \
      -e POSTGRES_USER=<your-user> \
      -e POSTGRES_PASSWORD=<your-password> \
      -d postgres
 
    # Create the database
-   docker exec -i interlexical psql -U <your-user> -c "CREATE DATABASE <your-db-name>;"
+   docker exec -i interlexical-db psql -U <your-user> -c "CREATE DATABASE <your-db-name>;"
    ```
 
 6. Run migrations
@@ -115,8 +115,8 @@ pnpm test
 Build and run with Docker:
 
 ```bash
-docker build -t interlexical .
-docker run -p 3333:3333 --env-file .env interlexical
+docker build -t interlexical-app .
+docker run -p 3333:3333 --env-file .env -e PG_HOST=host.docker.internal interlexical-app
 ```
 
 ## Deployment
